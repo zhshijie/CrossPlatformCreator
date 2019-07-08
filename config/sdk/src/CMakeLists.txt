@@ -10,7 +10,7 @@ source_group("header" FILES ${sdk_public_header})
 
 # cocoa header file
 file(GLOB objc_public_header "${CMAKE_SOURCE_DIR}/sdk/cocoa/src/*.h*")
-source_group("objc Header" FILES ${objc_public_header})
+file(GLOB objc_src "${CMAKE_SOURCE_DIR}/sdk/cocoa/src/*.mm")
 
 
 #source file
@@ -80,6 +80,8 @@ endif()
 if(APPLE)
   list(APPEND sdk_src 
     ${sdk_public_header}
+    ${objc_public_header}
+    ${objc_src}
     )
 endif()
 
