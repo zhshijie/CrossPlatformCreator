@@ -1,0 +1,11 @@
+[requires]
+#boringssl/1.1.0@1602/stable
+# 添加第三方依赖库，公司内部编译了常用的第三方库，可以通过 https://artifactory.gz.cvte.cn/artifactory/webapp/#/artifacts/browse/tree/General/conan 进行查找
+
+[generators]
+cmake_multi
+
+[options]
+#boringssl:shared=False
+#第三方依赖库的配置，shared=False 通过静态库的方式引入
+
