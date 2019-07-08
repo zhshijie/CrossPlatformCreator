@@ -7,5 +7,5 @@ source_group("src" FILES ${FILE_SRC})
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fobjc-abi-version=2 -fobjc-arc")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fobjc-abi-version=2 -fobjc-arc")
 
-add_library(helloObjc STATIC ${OBJC_ADAPTER_SRC})
+add_library($$projectName$$Objc STATIC ${OBJC_ADAPTER_SRC})
 

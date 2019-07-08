@@ -32,7 +32,7 @@ def inputAndroidPackage():
   global projectName
   defalutAndroidPackage = ("com.seewo.%s"%(projectName))
   defalutAndroidPackage = defalutAndroidPackage.lower()
-  androidPackage = input(("安卓 SDK 的包名(默认值是 com.seewo.%s): "%(defalutAndroidPackage)))
+  androidPackage = input(("安卓 SDK 的包名(默认值是 %s): "%(defalutAndroidPackage)))
   if not androidPackage:
     androidPackage = ("com.seewo.%s"%(projectName))
   androidPackage =  androidPackage.lower()
@@ -108,12 +108,11 @@ def copyConfigFileToProject():
 
 def modifyCMakeListsProjectName(path):
   data = ''
-  print("配置项目 cmake 编译配置")
+  print("配置项目 cmake 编译配置", path)
   try:
     with open(path, 'r+') as f:
       for line in f.readlines():
-        if(line.find('project($$projectName$$)') == 0):
-            line = 'project(%s' % (projectName,) + ')\n'
+        line = line.replace("$$projectName$$", projectName)
         data += line
   except:
     print("重写 CMakeLists 中的项目名失败")
@@ -257,6 +256,7 @@ def createCxxDir(path):
 def modifyCocoaDir(sdkPath):
   print("初始化 Cocoa 实例代码")
   modifyDir(sdkPath + '/cocoa/src')
+  modifyCMakeListsProjectName(sdkPath + '/cocoa/CMakeLists.txt')
 
 # 根据安卓的包名，创建响应的 Android 目录
 def createAndroidPackageDir(sdkPath):

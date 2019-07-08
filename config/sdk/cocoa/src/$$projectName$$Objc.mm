@@ -1,4 +1,4 @@
-#import "HelloObjc.h"
+#import "$$projectName$$Objc.h"
 #include "../../src/header/$$projectName$$.h"
 
 
