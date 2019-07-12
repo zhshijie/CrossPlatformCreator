@@ -3,7 +3,6 @@
 import os
 import shutil 
 
-
 projectName = ""
 projectPath = ""
 androidPackage = ""
@@ -106,26 +105,6 @@ def copyConfigFileToProject():
   configDirPath = os.getcwd() + '/' + 'config'
   traverseDir(configDirPath, copyFileToProject)
 
-def modifyCMakeListsProjectName(path):
-  data = ''
-  print("配置项目 cmake 编译配置", path)
-  try:
-    with open(path, 'r+') as f:
-      for line in f.readlines():
-        line = line.replace("$$projectName$$", projectName)
-        data += line
-  except:
-    print("重写 CMakeLists 中的项目名失败")
-    pass
-  
-  try:
-     with open(path, 'r+') as f:
-       f.writelines(data)
-  except:
-    print("重写 CMakeLists 中的项目名失败")
-    pass
- 
-
 # 文件复制到 project 根目录下
 def copyFileToTargetPath(filePath, targetPath):
   filename = filePath.split("/")[-1]
@@ -142,12 +121,10 @@ def copyDemoConfigToCxxDir(path):
     copyFileToTargetPath(filePath, path)
   traverseDir(configDirPath, copyToCxxDir)
 
-
 def CxxDemoHeaderData():
   return "void hello();"
 
 def createCxxDemoHeader(path):
-
   headerName = projectName[0].upper()+projectName[1:]
   filename = path + '/' + headerName + '.h'
   with open(filename,'w') as f:
@@ -161,30 +138,6 @@ def createCxxHeader(path):
   mkdir(headerPath)
   # 创建 demo.h 文件
   createCxxDemoHeader(headerPath)
-
-
-# 根据 projectName 和 BundleId，修改制定的参数
-def modiyCxxMakeList(path):
-  data = ''
-  try:
-    with open(path, 'r+') as f:
-      for line in f.readlines():
-        cxxLibararyName = projectName + 'SDK'
-        cxxProjectName = projectName + 'SDK'
-        line = line.replace("$$projectName$$", cxxProjectName)
-        line = line.replace("$$libnameName$$", cxxProjectName)
-        line = line.replace('$$BundleId$$', cococaBundleId)
-        data += line
-  except expression:
-    print("重写 C++ CMakeLists 中的项目名失败，error = ", expression)
-    pass
-  
-  try:
-     with open(path, 'r+') as f:
-       f.writelines(data)
-  except expression:
-    print("重写 C++ CMakeLists 中的项目名失败，error = ", expression)
-    pass
 
 def createCxxDemoSrc(path):
   cxxDemoFileName = path + '/src/' +projectName + '.cc'
@@ -212,16 +165,20 @@ def modifyFile(path):
       for line in f.readlines():
         packageId = androidPackage.replace('.','_')
         packagePath = androidPackage.replace('.','/')
+        cxxLibararyName = projectName + 'SDK'
+        cxxProjectName = projectName + 'SDK'
         line = line.replace("$$projectName$$", projectName)
         line = line.replace("$$packageId$$", packageId)
         line = line.replace('$$packagePath$$', packagePath)
+        line = line.replace("$$libnameName$$", cxxProjectName)
+        line = line.replace('$$BundleId$$', cococaBundleId)
         data += line
   except:
     print("重写 C++ CMakeLists 中的项目名失败")
     pass
   
   try:
-     with open(path, 'r+') as f:
+     with open(path, 'w+') as f:
        f.writelines(data)
   except:
     print("重写 C++ CMakeLists 中的项目名失败")
@@ -246,7 +203,7 @@ def createCxxDir(path):
   #创建 header 目录
   createCxxHeader(CXXSrcPath)
   # 修改 CMakeLists.text 中的项目名称和库名
-  modiyCxxMakeList(CXXSrcPath + '/CMakeLists.txt')
+  modifyFile(CXXSrcPath + '/CMakeLists.txt')
   # 创建 c++ demo 源码
   createCxxDemoSrc(CXXSrcPath)
   # 修改 jni 文件
@@ -256,7 +213,9 @@ def createCxxDir(path):
 def modifyCocoaDir(sdkPath):
   print("初始化 Cocoa 实例代码")
   modifyDir(sdkPath + '/cocoa/src')
-  modifyCMakeListsProjectName(sdkPath + '/cocoa/CMakeLists.txt')
+  modifyDir(sdkPath + '/cocoa/demo')
+  modifyFile(sdkPath + '/cocoa/CMakeLists.txt')
+  modifyFile(sdkPath + '/cocoa/info.plist')
 
 # 根据安卓的包名，创建响应的 Android 目录
 def createAndroidPackageDir(sdkPath):
@@ -271,7 +230,7 @@ def createAndroidPackageDir(sdkPath):
 # 创建 Java 的demo 
 def createJaveDemoSrc(path): 
   print("初始化 Android 实例代码")
-  cxxDemoFileName = path + '/' + projectName + '.java'
+  cxxDemoFileName = path + '/' + projectName + 'Sdk.java'
   with open(cxxDemoFileName,'w') as f:
     javaDemoData = '''
     package %s;
@@ -298,7 +257,7 @@ def main():
   createProjectDir()
   copyConfigFileToProject()
   # 修改根目录的 CMakeLists 文件
-  modifyCMakeListsProjectName(projectTotalPath + '/CMakeLists.txt')
+  modifyFile(projectTotalPath + '/CMakeLists.txt')
   # 创建 SDK 目录
   sdkPath = projectTotalPath + '/sdk'
 

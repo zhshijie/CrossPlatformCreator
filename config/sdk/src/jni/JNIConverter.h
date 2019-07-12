@@ -21,7 +21,7 @@
 
 static const std::string ClassName(const char *name)
 {
-    const static std::string sPath = "$$packagePath$$";
+    const static std::string sPath = "$$packagePath$$/";
     return sPath + name;
 }
 

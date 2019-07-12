@@ -10,8 +10,8 @@ extern "C" {
     JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved);
 
     /*
-    * Class:     com_seewo_hello_HelloSdk
-    * Method:    hello
+    * Class:     $$packageId$$_$$projectName$$
+    * Method:    $$projectName$$
     * Signature: ()V
     */
     JNIEXPORT void JNICALL Java_$$packageId$$_$$projectName$$Sdk_hello
